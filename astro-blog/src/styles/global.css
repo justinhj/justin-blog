@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-light-bg text-light-text;
+    @apply dark:bg-dark-bg dark:text-dark-text;
+    @apply transition-colors duration-300;
+  }
+
+  a {
+    @apply text-light-link dark:text-dark-link;
+    @apply hover:underline transition-colors;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-light-text dark:text-dark-text;
+    @apply font-bold;
+  }
+
+  h1 { @apply text-3xl md:text-4xl mb-4; }
+  h2 { @apply text-2xl md:text-3xl mt-8 mb-3; }
+  h3 { @apply text-xl md:text-2xl mt-6 mb-2; }
+  h4 { @apply text-lg md:text-xl mt-4 mb-2; }
+  h5 { @apply text-base md:text-lg mt-3 mb-1; }
+
+  pre {
+    @apply bg-gray-900 dark:bg-gray-950 p-4 rounded-lg overflow-x-auto my-4;
+  }
+
+  code {
+    @apply font-mono text-sm;
+  }
+
+  :not(pre) > code {
+    @apply bg-light-card dark:bg-dark-card px-1.5 py-0.5 rounded text-sm;
+  }
+
+  blockquote {
+    @apply border-l-4 border-tag-blue pl-4 italic my-4;
+    @apply text-light-text-secondary dark:text-dark-text-secondary;
+  }
+
+  ul, ol {
+    @apply my-4 ml-6;
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+
+  li {
+    @apply my-1;
+  }
+
+  p {
+    @apply my-4 leading-relaxed;
+  }
+
+  hr {
+    @apply border-light-text-secondary/30 dark:border-dark-text-secondary/30 my-8;
+  }
+}
+
+/* Prose styling for blog posts */
+.prose {
+  @apply max-w-none;
+}
+
+.prose img {
+  @apply rounded-lg my-6 mx-auto;
+}
+
+.prose table {
+  @apply w-full my-4 border-collapse;
+}
+
+.prose th, .prose td {
+  @apply border border-light-text-secondary/30 dark:border-dark-text-secondary/30 px-3 py-2;
+}
+
+.prose th {
+  @apply bg-light-card dark:bg-dark-card font-semibold;
+}
+
+/* Chart container styles (from original post) */
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 300px;
+  max-height: 40vh;
+}
+
+@media (min-width: 768px) {
+  .chart-container {
+    height: 400px;
+  }
+}
+
+.chart-btn {
+  @apply px-4 py-2 text-sm font-medium rounded-md transition-colors;
+  @apply border border-light-text-secondary/30 dark:border-dark-text-secondary/30;
+  @apply text-light-text-secondary dark:text-dark-text-secondary;
+  @apply hover:bg-light-card dark:hover:bg-dark-card;
+}
+
+.chart-btn-active {
+  @apply bg-tag-blue text-white border-tag-blue;
+}

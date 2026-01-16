@@ -1,0 +1,41 @@
+---
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '' } = Astro.props;
+
+const navItems = [
+  { href: '/', label: 'All Posts' },
+  { href: '/topposts', label: 'Popular Posts' },
+  { href: 'https://youtube.com/c/FunctionalJustin', label: 'YouTube Channel', external: true },
+  { href: '/talks', label: 'Speaking Events' },
+  { href: '/privacy', label: 'Privacy' },
+];
+---
+
+<nav class="mb-8 pb-4 border-b border-light-text-secondary/20 dark:border-dark-text-secondary/20">
+  <ul class="flex flex-wrap justify-center md:justify-start gap-x-1 gap-y-2 text-sm">
+    {navItems.map((item, index) => (
+      <>
+        {index > 0 && <li class="text-light-text-secondary dark:text-dark-text-secondary">•</li>}
+        <li>
+          <a
+            href={item.href}
+            target={item.external ? '_blank' : undefined}
+            rel={item.external ? 'noopener noreferrer' : undefined}
+            class:list={[
+              "px-2 py-1 rounded transition-colors",
+              currentPath === item.href
+                ? "text-light-link dark:text-dark-link font-semibold"
+                : "text-light-link dark:text-dark-link hover:underline"
+            ]}
+          >
+            {item.label}
+            {item.external && <span class="text-xs ml-1">↗</span>}
+          </a>
+        </li>
+      </>
+    ))}
+  </ul>
+</nav>
