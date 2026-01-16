@@ -13,12 +13,13 @@ export default {
         'light-link': '#0066CC',
 
         // Dark mode colors
-        'dark-bg': '#2B3544',
-        'dark-card': '#1F2937',
+        'dark-bg': '#171c24',
+        'dark-card': '#252d3a',
         'dark-text': '#C9D1D9',
         'dark-text-secondary': '#8B949E',
         'dark-link': '#539BF5',
         'dark-border': '#30363D',
+        'dark-heading': '#E6EDF3',
 
         // Shared colors
         'tag-blue': '#3498DB',
