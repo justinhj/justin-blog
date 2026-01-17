@@ -6,11 +6,12 @@ export default {
     extend: {
       colors: {
         // Light mode colors
-        'light-bg': '#F5F5DC',
-        'light-card': '#F8F4E8',
-        'light-text': '#2C3E50',
+        'light-bg': '#FFFAF0',
+        'light-card': '#EEE8D5',
+        'light-text': '#586E75',
         'light-text-secondary': '#6C757D',
-        'light-link': '#0066CC',
+        'light-link': '#1A73E8',
+        'light-border': '#D9CEB8',
 
         // Dark mode colors
         'dark-bg': '#171c24',
@@ -22,14 +23,15 @@ export default {
         'dark-heading': '#E6EDF3',
 
         // Shared colors
-        'tag-blue': '#3498DB',
+        'tag-blue': '#268bd2',
+        'tag-hover': '#2071a8',
       },
       maxWidth: {
         'content': '1200px',
       },
       fontFamily: {
-        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+        sans: ['Sora', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', 'monospace'],
       },
     },
   },

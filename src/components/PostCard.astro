@@ -14,11 +14,11 @@ const { title, date, tags, url, excerpt } = Astro.props;
 const formattedDate = format(date, 'MMM dd, yyyy');
 ---
 
-<article class="bg-light-card dark:bg-dark-card rounded-lg p-5 mb-4 transition-colors hover:shadow-md">
+<article class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg p-6 mb-8 transition-colors hover:shadow-md">
   <time class="text-sm text-light-text-secondary dark:text-dark-text-secondary">
     {formattedDate}
   </time>
-  <h2 class="text-xl font-semibold mt-1 mb-2">
+  <h2 class="text-2xl font-semibold mt-1 mb-2">
     <a href={url} class="text-light-text dark:text-dark-text hover:text-light-link dark:hover:text-dark-link">
       {title}
     </a>
