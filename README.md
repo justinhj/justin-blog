@@ -119,4 +119,4 @@ Your content here...
 
 ## License
 
-© 2025 Justin Heyes-Jones. All Rights Reserved.
+© 2026 Justin Heyes-Jones. All Rights Reserved.

@@ -1,0 +1,68 @@
+
+/* pre.src { */
+/*   background-color: red; */
+/*   color: white; /1* Or whatever color you want for the text *1/ */
+/*   font-size: 16px; */
+/*   font-family: 'JetBrains Mono', monospace; */
+/*   overflow-x: auto; */
+/*   padding: 1em; */
+/*   border: 1px solid #ccc; /1* Optional: adds a border *1/ */
+/*   border-radius: 5px; /1* Optional: rounds the corners *1/ */
+/* } */
+
+.footpara {
+    width: 99%;
+    text-align: left;
+    float: right;
+    padding: 0;
+    margin: 0;
+}
+
+.footdef {
+    line-height: 2em;
+}
+
+.outline-2, .outline-3, .outline-4, .outline-5, .outline-6 {
+    outline: none;
+}
+
+/* pre.src.src-c { */
+/*     background-color: #000; */
+/*     color: #fff; */
+/*     font-size: 16px; */
+/*     font-family: 'Sora', sans-serif; */
+/* } */
+
+/* pre.src.src-scala { */
+/*     background-color: #000; */
+/*     color: #fff; */
+/*     font-size: 16px; */
+/*     font-family: 'JetBrains Mono', monospace; */
+/*     overflow-x: auto; */
+/* } */
+
+th {
+  text-align: left;
+}
+
+.org-left {
+  text-align: left;
+}
+
+.org-right {
+  text-align: right;
+}
+
+.org-center {
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+
+td, th {
+  border: 1px solid #ccc;
+  padding: 8px;
+}

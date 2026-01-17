@@ -4,7 +4,7 @@ This repository contains the source code and planning documents for the **Functi
 
 ## Repository Structure
 
-*   **`referencematerial/`**: Contains migration plans, notes, and design references (images, HTML exports).
+*   **`referencematerial/`**: Contains migration plans, notes, design references, original site CSS, and original blog posts.
 *   **`CLAUDE.md`**: Legacy context file containing detailed migration notes and architectural decisions.
 *   **`.playwright-mcp/`**: Visual reference screenshots captured during the analysis phase.
 
@@ -73,3 +73,5 @@ The design mimics the legacy Jekyll blog with modern improvements.
 ## Reference Material
 *   **`referencematerial/notes.md`**: The source of truth for migration decisions, tag mappings, and architectural plans.
 *   **`referencematerial/darkmode.png`**: Visual target for the dark mode implementation.
+*   **`referencematerial/cssinfo.md`**: Details about the CSS from the original site intended for migration.
+*   **`referencematerial/_posts/`**: Contains the original site's blog posts in HTML format with Jekyll frontmatter.

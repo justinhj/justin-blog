@@ -1,0 +1,356 @@
+/**
+ * Reset some basic elements
+ */
+body, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, hr,
+dl, dd, ol, ul, figure {
+    margin: 0;
+    padding: 0;
+}
+
+/**
+ * Set `margin-bottom` to maintain vertical rhythm
+ */
+h1, h2, h3, h4, h5, h6,
+p, blockquote, pre,
+ul, ol, dl, figure,
+%vertical-rhythm {
+    margin-bottom: $spacing-unit / 2;
+}
+
+/**
+ * Images
+ */
+img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+/**
+ * Figures
+ */
+figure > img {
+    display: block;
+}
+
+figcaption {
+    font-size: $small-font-size;
+}
+
+/**
+ * Lists
+ */
+ul, ol {
+    margin-left: $spacing-unit / 3;
+    list-style-type: disc;
+}
+
+li {
+    > ul,
+    > ol {
+         margin-bottom: 0;
+    }
+}
+
+/**
+ * Headings
+ */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: $base-font-weight;
+}
+
+/**
+ * Links
+ */
+a {
+    color: $brand-color;
+    text-decoration: none;
+
+    &:visited {
+        color: darken($brand-color, 15%);
+    }
+
+    &:hover {
+        color: $text-color;
+        text-decoration: none;
+    }
+}
+
+
+@media (prefers-color-scheme: light) {
+  a {
+      color: $brand-color-light;
+      text-decoration: none;
+
+      &:visited {
+          color: darken($brand-color-light, 25%);
+      }
+      &:hover {
+          text-decoration: none;
+	  background-color: darken($background-color-light, 10%);
+      }
+  }
+
+}
+
+/**
+ * Blockquotes
+ */
+blockquote {
+    color: $grey-color;
+    border-left: 4px solid $grey-color-light;
+    padding-left: $spacing-unit / 2;
+    font-size: 18px;
+    letter-spacing: -1px;
+    font-style: italic;
+
+    > :last-child {
+        margin-bottom: 0;
+    }
+}
+
+/**
+ * Code formatting
+ */
+pre,
+code {
+    font-weight: bold;
+}
+
+/**
+ * Wrapper
+ */
+.wrapper {
+    max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit} * 2));
+    max-width:         calc(#{$content-width} - (#{$spacing-unit} * 2));
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: $spacing-unit;
+    padding-left: $spacing-unit;
+    @extend %clearfix;
+
+    @include media-query($on-laptop) {
+        max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit}));
+        max-width:         calc(#{$content-width} - (#{$spacing-unit}));
+        padding-right: $spacing-unit / 2;
+        padding-left: $spacing-unit / 2;
+    }
+}
+
+/**
+ * Clearfix
+ */
+%clearfix {
+
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+/**
+ * Icons
+ */
+.icon {
+
+    > img {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        padding: 8px;
+
+    }
+
+    > svg {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        vertical-align: middle;
+
+        path {
+            fill: $grey-color;
+        }
+    }
+}
+
+/* Custom styles to extend Tailwind */
+body {
+    /* Using a deep, modern dark color palette */
+    background-color: $background-color; /* A deep, modern dark background */
+    color: $text-color; /* Soft off-white for body text */
+    font-family: $base-font-family;
+    -webkit-text-size-adjust: 100%;
+    font-kerning: auto;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: $background-color-light;
+    color: $text-color-light;
+  }
+}
+
+/* Custom accent color variables for easy theme changes */
+:root {
+    --accent-color: #{$accent-color};
+    --accent-hover-color: #{$accent-hover-color};
+    --secondary-text-color: #{$secondary-text-color};
+    @media (prefers-color-scheme: light) {
+	--secondary-text-color: #{$secondary-text-color-light};
+    }
+    
+    --border-color: #{$border-color};
+    --card-bg-color: #{$card-bg-color};
+}
+
+/* Applying the monospaced font for a "coder" feel on specific elements */
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Styling for headings and links with the accent color */
+h1, h2, h3, .accent-text {
+    color: $accent-text; /* A slightly brighter white for important text */
+}
+
+@media (prefers-color-scheme: light) {
+  h1, h2, h3, .accent-text {
+    color: $accent-text-light;
+  }
+}
+
+// This messes with the above 
+// a {
+//     color: $accent-color;
+//     transition: color 0.2s ease-in-out;
+// }
+
+// a:hover {
+//     color: $accent-hover-color;
+// }
+
+/* Glassmorphism-inspired card effect for post previews */
+.post-card {
+    background-color: $card-bg-color;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+@media (prefers-color-scheme: light) {
+  .post-card {
+    background-color: $card-bg-color-light;
+    border: 1px solid $border-color-light;
+  }
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Styling for the topic tags */
+.tag {
+    display: inline-block;
+    background-color: #268bd2; /* A vibrant blue for tags */
+    color: #ffffff; /* White text for high contrast */
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px; /* Pill shape */
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-decoration: none; /* No underlines on tags */
+}
+
+.tag:hover {
+    background-color: #2071a8; /* A slightly darker blue on hover */
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Light mode tags */
+
+//@media (prefers-color-scheme: light) {
+
+  .tag a {
+      color: $background-color-light;
+      text-decoration: none;
+
+      &:visited {
+          color: darken($background-color-light, 5%);
+      }
+
+      &:hover {
+	  color: $background-color-light;
+          background-color: #268bd2;
+      }
+  }
+//}
+
+/* Force override of margins */
+.home h1,
+.home h2,
+.home h3 {
+  margin: 20px 0 20px 0;
+}
+
+.post h1,
+.post h2,
+.post h3 {
+  margin: 20px 0 20px 0;
+}
+
+.post .post-content .org-src-container pre.src {
+  margin: 30px 0 30px 0;
+}
+
+.post-content p {
+  margin: 30px 0 30px 0;
+}
+
+pre.src {
+    background-color: $background-color-light;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+
+    /* --- Fixes --- */
+    overflow-x: auto;         /* Adds a horizontal scrollbar when needed */
+    margin: 2em 0;            /* Adds space above and below the block */
+    padding: 1em;             /* Adds space inside the block */
+    /* --- End Fixes --- */
+
+    border: 1px solid #444;   /* Optional: a subtle border */
+    border-radius: 8px;       /* Optional: rounded corners */
+}
+
+@media (prefers-color-scheme: light) {
+  pre.src {
+      background-color: $background-color;
+  }
+}
+
+pre.example {
+    background-color: $background-color-light;
+    color: $text-color-light;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+
+    /* --- Fixes --- */
+    overflow-x: auto;         /* Adds a horizontal scrollbar when needed */
+    margin: 2em 0;            /* Adds space above and below the block */
+    padding: 1em;             /* Adds space inside the block */
+    /* --- End Fixes --- */
+
+    border: 1px solid #444;   /* Optional: a subtle border */
+    border-radius: 8px;       /* Optional: rounded corners */
+}
+
+@media (prefers-color-scheme: light) {
+  pre.example {
+      background-color: $background-color;
+      color: $text-color;
+  }
+}
+
