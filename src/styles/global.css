@@ -15,12 +15,8 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-light-text;
+    @apply text-light-text dark:text-dark-heading;
     @apply font-bold;
-  }
-
-  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-    color: #E6EDF3;
   }
 
   h1 { @apply text-3xl md:text-4xl mb-4; }
@@ -30,7 +26,8 @@
   h5 { @apply text-base md:text-lg mt-3 mb-1; }
 
   pre {
-    @apply bg-gray-900 dark:bg-gray-950 p-4 rounded-lg overflow-x-auto my-4;
+    @apply bg-light-bg text-light-text p-4 rounded-lg overflow-x-auto my-4;
+    border: 1px solid #444; /* Match old site border */
   }
 
   code {
@@ -42,7 +39,7 @@
   }
 
   blockquote {
-    @apply border-l-4 border-tag-blue pl-4 italic my-4;
+    @apply border-l-4 border-[#EAEAEA] pl-4 italic my-4;
     @apply text-light-text-secondary dark:text-dark-text-secondary;
   }
 

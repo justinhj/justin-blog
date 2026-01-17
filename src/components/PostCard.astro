@@ -14,7 +14,7 @@ const { title, date, tags, url, excerpt } = Astro.props;
 const formattedDate = format(date, 'MMM dd, yyyy');
 ---
 
-<article class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg p-6 mb-8 transition-colors hover:shadow-md">
+<article class="bg-light-card dark:bg-dark-card border border-light-border dark:border-none rounded-lg p-6 mb-8 transition-colors hover:shadow-md">
   <time class="text-sm text-light-text-secondary dark:text-dark-text-secondary">
     {formattedDate}
   </time>

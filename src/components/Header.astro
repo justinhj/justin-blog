@@ -15,14 +15,14 @@ const { title = "Functional[Justin]" } = Astro.props;
       <img
         src="/images/justinmars.jpg"
         alt="Justin Heyes-Jones"
-        class="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-tag-blue"
+        class="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-tag-blue dark:border-dark-border"
       />
     </div>
 
     <!-- Title and Description -->
     <div class="flex-grow text-center md:text-left">
-      <h1 class="text-[26px] font-light leading-[56px] -tracking-[1px] text-light-text dark:text-dark-text mb-0">
-        <a href="/" class="hover:no-underline">{title}</a>
+      <h1 class="text-[26px] font-light leading-[56px] -tracking-[1px] mb-0">
+        <a href="/" class="text-light-text dark:text-dark-heading hover:no-underline">{title}</a>
       </h1>
       <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm md:text-base">
         Principal Software Engineer. Streaming data at scale. Generative AI. Functional Programming. Neovim. Emacs.

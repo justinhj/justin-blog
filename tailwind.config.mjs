@@ -14,20 +14,20 @@ export default {
         'light-border': '#D9CEB8',
 
         // Dark mode colors
-        'dark-bg': '#171c24',
-        'dark-card': '#252d3a',
-        'dark-text': '#C9D1D9',
-        'dark-text-secondary': '#8B949E',
-        'dark-link': '#539BF5',
-        'dark-border': '#30363D',
-        'dark-heading': '#E6EDF3',
+        'dark-bg': '#1A1B26',
+        'dark-card': 'transparent',
+        'dark-text': '#A9B1D6',
+        'dark-text-secondary': '#848484',
+        'dark-link': '#2A7AE2',
+        'dark-border': '#2C2E3B',
+        'dark-heading': '#C0CAF5',
 
         // Shared colors
         'tag-blue': '#268bd2',
         'tag-hover': '#2071a8',
       },
       maxWidth: {
-        'content': '1200px',
+        'content': '800px',
       },
       fontFamily: {
         sans: ['Sora', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
