@@ -1,0 +1,239 @@
+---
+title: "#+TITLE: Some Scala 3 Things"
+date: 2020
+tags: []
+draft: false
+---
+
+## Some Scala 3 Things: Context functions, Enums and significant whitespace
+
+`code`
+
+This is the companion blog for my first Functional Justin video which you can find here https&#x3A;//youtu.be/J01u_Dmrx5U. I spend around 15 minutes adding some Scala 3 (formerly Dotty) features to an Scala 2 program.
+
+The program itself builds a simple Algebraic Data Type (ADT) to represent a simple arithmetic expressions. We can then build expressions in this `algebra` and evaluate it using an eval function using pattern matching...
+
+```scala 
+sealed trait Exp
+case class Val(value: Int) extends Exp
+case class Add(left: Exp, right: Exp) extends Exp
+case class Mul(left: Exp, right: Exp) extends Exp
+case class Var(identifier: String) extends Exp
+```
+
+Now given an expression like `code` I'd like to be able to recursively traverse it and calculate a final Int value at the end.
+
+`Val` represents an Int value, whilst `Add` and `Mul` take care of addition and multiplication. You could go ahead and add more functions. `Var` is interesting because it takes an a string identifier (i.e., a variable name) and will look it up in an environment. The environment is represented a Scala map of String to Int.
+
+```scala 
+type Env = Map[String, Int]
+```
+
+For the eval function we just use a pattern match to dispatch to functions that handle each particular operation. These handler functions and eval are `mutally recursive`, and note that every function has to have the `Env` passed to it as an implicit parameter, yet only `Var` needs it. This will be important later.
+
+Here's the eval function and handlers.
+
+```scala 
+def eval(exp: Exp)(implicit env : Env): Int = {
+  exp match {
+    case Var(id) => handleVar(id)
+    case Val(value) => value
+    case Add(l,r) => handleAdd(l,r)
+    case Mul(l,r) => handleMul(l,r)
+  }
+}
+
+def handleAdd(l: Exp, r: Exp)(implicit env : Env) = eval(l) + eval(r)
+def handleMul(l: Exp, r: Exp)(implicit env : Env) = eval(l) * eval(r)
+def handleVar(s: String)(implicit env: Env) = env.getOrElse(s, 0)
+```
+
+Note that we could have inlined these functions in eval, but it a larger example it's important to break things out to keep things managable.
+
+That is all the implementation we need, and all that remains is to create an expression, create an environment (declared implicit so Scala knows to include it as an implicit when eval is called) and print the result of evaluating the expression.
+
+```scala 
+val exp1 : Exp = Mul(Var("z"), Add(Val(30), Mul(Var("x"), Var("y"))))
+
+implicit val env : Env = Map("x" -> 17, "y" -> 10, "z" -> 2)
+val eval1 = eval(exp1)
+
+println(s"Eval exp gives $eval1")
+```
+
+You can compile and run the code to see this working. The code is here. https&#x3A;//github.com/justinhj/evalexample/blob/master/src/main/scala/Scala2Eval.scala
+
+## Fun with Enum
+
+Scala enums have been improved greatly. For one they are very simple to create and use just as in other languages.
+
+```scala 
+ enum StatusCode:
+    case OK, TimedOut, Error
+```
+
+Here we've defined three enums that have ordinal values 0 to 2. You can access the ordinal value with the `code` method, convert ordinal values to Enums using `code` and convert Strings to enums (assuming they match) with `code`.
+
+```scala 
+  println(s"Ordinal value of StatusCode.Error is ${StatusCode.Error.ordinal}")
+  println(s"StatusCode from ordinal 1 is ${StatusCode.fromOrdinal(1)}")
+  println(s"StatusCode from string OK is ${StatusCode.valueOf("OK")}")
+
+  // Ordinal value of StatusCode.Error is 2
+  // StatusCode from ordinal 1 is TimedOut
+  // StatusCode from string OK is OK
+```
+
+You can also add your own parameters and definitions to enums. The underlying ordinal values are still there. For example you could encode Http Status codes as follows.
+
+```scala 
+enum HttpStatusCode(code: Int) {
+  case OK extends HttpStatusCode(200)
+  case NotModified extends HttpStatusCode(304)
+  case Forbidden extends HttpStatusCode(404)
+
+  def isSuccess = code >= 200 && code < 300
+}
+```
+
+Scala 3 team also took the opportunity to make Enums `code`. For our purposes that means we can simply the definition of `code` as follows.
+
+```scala 
+enum Exp {
+  case Val(value: Int) extends Exp
+  case Add(left: Exp, right: Exp) extends Exp
+  case Var(identifier: String) extends Exp
+}
+```
+
+In fact you can further simplify to the following (you could also remove the braces).
+
+```scala 
+enum Exp {
+  case Val(value: Int)
+  case Add(left: Exp, right: Exp)
+  case Var(identifier: String)
+}
+```
+
+## Explicit implicits
+
+A focus of the Scala 3 team is to help beginners access the language and in particular simplifying implicits. There are many subtle changes here but two obvious ones are that you now have different keywords for implicit parameters and creating implicit instances. In our code this means that when we supply the implicit symbol table to eval we now use the new `code` syntax instead of `code`.
+
+```scala 
+implicit val env : Env = Map("x" -> 17, "y" -> 10, "z" -> 2)
+```
+
+becomes...
+
+```scala 
+given envMap: Env = Map("x" -> 7, "y" -> 6, "z" -> 22)
+```
+
+Similarly, the method parameters now no longer use the implicit keyword and instead you prefix the parameter name with `code`.
+
+    def eval(exp: Exp)(implicit env : Env): Int
+
+becomes...
+
+```scala 
+def eval(exp: Exp)(using env : Env): Int
+```
+
+You don't have to change your Scala 2 code at this point, it is still compatible, but for new code and in the long term you should gradually eliminate implicit.
+
+## Context Functions
+
+Last and not at all least are context functions. This gives us one more opportunity to remove boiler plate from the eval code. When you create a regular function value it has a type like `code`. In other words it is a function that takes a value A and returns vale of type B. Context Functions are a new function value type (this is synthesized by the compiler so you won't see it your code), with an input and an output type. The difference is that the input is understood to be provided implicitly.
+
+Let's make this more concrete. Assume you have a function that needs an `code`. We can make a Context Function type that will take an implicit execution context and return some paramaterized type T.
+
+```scala 
+type Executable[T] = ExecutionContext ?=> T
+```
+
+How would that be used in a real program? Let's say you have some deeply nested function (f4 in the code below) and it is only down at that level you need the implicit execution context. Without implicit parameters you'd add the ExecutionContext parameter to every single function call all the way down and then have to take care to pass it along. With Scala 2 implicits you still have to declare the parameter but you can make it implicit and avoid the burden of manually passing it along.
+
+With Scala 3 you can define the function to be of type `code` and then we don't need to even name the implicit parameter, we just know that it will be included automatically all the way down. Here is a complete example.
+
+```scala 
+import scala.concurrent.{Future, ExecutionContext, Await}
+import scala.concurrent.duration._
+import scala.language.postfixOps
+
+object Executable extends App {
+
+  type Executable[T] = ExecutionContext ?=> T
+
+  def f1(n: Int): Executable[Future[Int]] = f2(n + 1)
+  def f2(n: Int): Executable[Future[Int]] = f3(n + 1)
+  def f3(n: Int): Executable[Future[Int]] = f4(n + 1)
+  def f4(n: Int): Executable[Future[Int]] = {
+    val ex = summon[ExecutionContext]
+    Future {
+      println(s"Hi from the future! n is $n")
+      n
+    }
+  }
+
+  {
+    given ec: ExecutionContext = scala.concurrent.ExecutionContext.global
+    Await.result(f1(10), 1 second)
+    // Hi from the future! n is 13
+  }
+
+}
+```
+
+Context functions reduce boilerplate when dealing with implicit parameters in deeply nested code. We can apply this technique to our eval function so that the symbol table itself is the implicit piece of context.
+
+```scala 
+type WithEnv = Env ?=> Int
+
+def eval(exp: Exp): WithEnv =
+  exp match {
+    case Var(id) => handleVar(id)
+    case Val(value) => value
+    case Add(l,r) => handleAdd(l,r)
+  }
+
+def handleAdd(l: Exp, r: Exp): WithEnv = eval(l) + eval(r)
+
+def handleVar(s: String): WithEnv =
+  val env = summon[Env]
+  env.getOrElse(s, 0)
+```
+
+You can take a look at the final Scala 3 version of the code here.
+
+https&#x3A;//github.com/justinhj/evalexample/blob/master/src/main/scala/Scala3Eval.scala
+
+## Final notes
+
+Of all the new features in Scala 3, I found Context Functions of most interest because of Martin Odersky's blog from 2016 https&#x3A;//www.scala-lang.org/blog/2016/12/07/implicit-function-types.html where this intriguing quote appears near the end. (Context functions were initially known as implicit functions).
+
+    There are many interesting connections with category theory to explore here. On the one hand, implicit functions are used for tasks that are sometimes covered with monads such as the reader monad. There’s an argument to be made that implicits have better composability than monads and why that is.
+
+    On the other hand, it turns out that implicit functions can also be given a co-monadic interpretation, and the interplay between monads and comonads is very interesting in its own right.
+
+    But these discussions will have to wait for another time, as this blog post is already too long.
+
+Somewhat of a Fermat's last theorem moment there, and I am also interested in how we can represent concepts, that are currently implemented in libraries which model category theory, using vanilla Scala 3 or alternative representations.
+
+## References
+
+https&#x3A;//en.wikiquote.org/wiki/Pierre_de_Fermat
+
+https&#x3A;//dotty.epfl.ch/docs/reference/enums/enums.html https&#x3A;//dotty.epfl.ch/docs/reference/enums/adts.html
+
+http&#x3A;//dotty.epfl.ch/docs/reference/other-new-features/indentation.html
+
+https&#x3A;//dotty.epfl.ch/docs/reference/contextual/givens.html https&#x3A;//dotty.epfl.ch/docs/reference/contextual/using-clauses.html
+
+https&#x3A;//dotty.epfl.ch/docs/reference/contextual/context-functions.html
+
+Foundations and Applications of Implicit Function Types https&#x3A;//infoscience.epfl.ch/record/229878/files/simplicitly_1.pdf
+
+http&#x3A;//recurse.se/2019/09/implicit-functions-in-scala-3/
+
+\\copy 2020 Justin Heyes-Jones. All Rights Reserved.

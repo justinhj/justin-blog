@@ -1,0 +1,142 @@
+---
+title: "Blogging with Emacs and Org-mode"
+date: 2020
+tags: []
+draft: false
+---
+
+## Why blog with Org mode?
+
+    Org is a mode for keeping notes, maintaining TODO lists, and project
+    planning with a fast and effective plain-text system.
+
+Like most things in the Emacs world, this description of [Org mode](https://orgmode.org/) belies the true depth of what it can do. Mostly I use Org mode only superficially as a way to track notes and projects, using it as a tree of tasks and the status of each. However, Org mode is good at many other tasks, not least of those is authoring content. I write most of the posts in this blog using markdown, but since I am in Emacs anyway and Org mode is a much richer authoring tool I decided to give it a go.
+
+Another thing that motivated the change was Sam Halliday's book [Functional Programming for Mortals](https://leanpub.com/fpmortals) which is written entirely in Org mode. As well as as having no problem with code, images and text, the book even embeds [DOT (graph description language)](https://en.wikipedia.org/wiki/DOT_(graph_description_language)) to define and render diagrams inline in the org manuscript.
+
+Just a heads up, I host the blog (at the time of writing) on Github Pages which uses [Jekyll](https://jekyllrb.com), a static site generator ideal for blogs and other content creation. Some of the information here is not relevant if you don't use Jekyll, but you can still use these steps to generate HTML and upload that to your site.
+
+I followed the steps in this post on [Using org to Blog with Jekyll](https://orgmode.org/worg/org-tutorials/org-jekyll.html) with some modifications to get everything working.
+
+## How to author content with Org mode
+
+In my blog repository I made a new folder `org/posts`. In the `org` folder I added an Emacs Lisp file `publish.el` which contains some code to set up the publishing parameters for later.
+
+Then you can create a blog post in the `org/posts` folder which must be named with the usual convention, but with an `.org` extension instead of `.md` or `.html`.
+
+For example:`org/posts/2020-03-15-beware-the-ides-of-march.org`
+
+You can structure your post just like an org file and the headlines will map to headings and sub-headings in your post. All of the formatting
+
+For example:
+
+    #+BEGIN_QUOTE
+    "You can format quotes using the quote directive."
+      ― Emacs User
+    #+END_QUOTE
+
+Would be rendered as:
+
+    "You can format quotes using the quote directive."
+      ― Emacs User
+
+By preceding items with `1.` or `*` you can make lists, which can be nested:
+
+1.  First item
+2.  Another item \* Nested first item \* Second nested item
+3.  Behold, a third item
+
+You can have _italics by wrapping words_ in forward slashes. You can **bold** a word with asterisks. _\*Both at once\*_ is of course also allowed.
+
+Using equals will `emphasize things` and tildes can be used for inline code `val x = y + 1`.
+
+You can use special symbols like \\pound100 and _\\copy2020 Justin Heyes-Jones_ and mathematical symbols like \\lambda and \\pi. See [Symbols in Org mode](https://orgmode.org/worg/org-symbols.html) for the full list.
+
+Images can be included by using a file link (without a description if you want to inline the image), and you can modify the HTML attributes as follows:
+
+    #+CAPTION: Photo by Rumman Amin on Unsplash
+    #+ATTR_HTML: :alt A nice cup of coffee :width 400
+    [[../../../images/rumman-amin-bJzJH85Kp7g-unsplash.jpg]]
+
+Which renders the image inline:
+
+[../../../images/rumman-amin-bJzJH85Kp7g-unsplash.jpg](../../../images/rumman-amin-bJzJH85Kp7g-unsplash.jpg)
+
+## Source code
+
+Since you're reading my technical blog you may be the sort of person that likes to share code. Org mode supports source code (you can even run it and pass the variables around to other parts of the document). Just wrap your code in a`code` and `code` block. The code will be highlighted using whatever configuration you have already for that mode, you can optionally have line numbers using the `code` option:
+
+```emacs-lisp 
+(require 'company)
+
+(defun custom-dictionary-company-backend (command &optional arg &rest ignored)
+  "Company mode backend for a custom dictionary stored as a radix tree."
+  (case command
+    ('init    
+     (unless (boundp 'custom-dictionary-company--words-tree)
+         (setq custom-dictionary-company--words-tree (tree-from-file "dictionary.el"))))
+    ('prefix
+     (company-grab-word))
+    ('candidates
+     (radix-tree-keys custom-dictionary-company--words-tree (downcase arg)))
+    ('ignore-case
+     'keep-prefix)))
+```
+
+And some Scala code with line numbers
+
+```scala -n
+  def main(args: Array[String]): Unit = {
+
+    // ISO 8601
+    val lastNotifications = "Fri, 06 Mar 2020 22:13:45 GMT"
+
+    val program = (for(
+        implicit0(backend: SttpBackend[Task,Nothing,WebSocketHandler])
+          <- AsyncHttpClientZioBackend();
+        response <- getGists().send();
+        _ <- putStrLn(s"We got the notifications");
+        _ <- putStrLn(s"Response: $response")
+        ) yield ())
+
+    runtime.unsafeRun(program)
+  }
+```
+
+## Implementation notes
+
+I diverged from the guide I was following. Firstly I made a file `publish.el`which contains the code required to configure the publishing of the blog, and modified it so that instead of hard coded paths it just uses relative paths to make things easier. To publish a blog you need to just evaluate this file once in a session and run `org-publish-all` to publish all your Org projects, or`org-publish` to select just one.
+
+    ;; -*- flycheck-disabled-checkers: (emacs-lisp-checkdoc); byte-compile-warnings: (not free-vars) -*-
+    ;; Run this then M-x org-publish
+
+    (setq project-root (locate-dominating-file "." "_config.yml"))
+
+    (setq org-publish-project-alist
+      `(
+        ("org-justinhj"
+         ;; Path to your org files.
+         :base-directory ,(concat project-root "org/posts")
+         :base-extension "org"
+         ;; Path to your Jekyll project.
+         :publishing-directory ,(concat project-root "_posts")
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :section-numbers nil
+         :headline-levels 4
+         :html-extension "html"
+         :body-only t
+         )
+        ))
+
+Publishing will create HTML versions of the posts in Jekyll's `_posts` folder and then you can build your site and view it locally before pushing to Github Pages.
+
+## Summary
+
+One thing I'm not sure about is if I like using Emacs's code blocks instead of embedded Github gists. It's certainly possible to use either. Anyway I plan to do a few future blogs using this method and see how it works out.
+
+You can view the raw org file for this post in my github repository here:[https://raw.githubusercontent.com/justinhj/justinhj.github.io/master/org/posts/2020-03-08-how-to-blog-with-org-mode.org](https://raw.githubusercontent.com/justinhj/justinhj.github.io/master/org/posts/2020-03-08-how-to-blog-with-org-mode.org)
+
+Thanks for reading!
+
+\\copy2020 Justin Heyes-Jones. All Rights Reserved
